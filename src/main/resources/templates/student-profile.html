@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile | RGUKT RK Valley</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #eef1f7;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text: #111;
+            --header-bg: rgba(255, 255, 255, 0.4);
+        }
+
+        body.dark {
+            --bg: #0e0f17;
+            --card-bg: rgba(28, 28, 40, 0.85);
+            --text: #f2f2f2;
+            --header-bg: rgba(40, 40, 60, 0.4);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            transition: 0.4s;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 20px 40px;
+            gap: 15px;
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .header img {
+            width: 70px;
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .toggle-btn {
+            margin-left: auto;
+            padding: 8px 16px;
+            background: #4e5bf0;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 15px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+            margin-bottom: 25px;
+            animation: fadeUp 0.7s;
+        }
+
+        @keyframes fadeUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: 1px solid #bbb;
+            font-size: 15px;
+        }
+
+        .edit-btn, .update-btn, .cancel-btn {
+            padding: 10px 18px;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .edit-btn { background: #4c5bf0; }
+        .update-btn { background: #2ecc71; }
+        .cancel-btn { background: #e74c3c; }
+    </style>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle("dark");
+        }
+
+        function showForm() {
+            document.getElementById("editForm").style.display = "block";
+        }
+
+        function hideForm() {
+            document.getElementById("editForm").style.display = "none";
+        }
+    </script>
+</head>
+
+<body>
+
+<!-- Header -->
+<div class="header">
+    <img th:src="@{/images/rgukt_logo.jpeg}">
+    <div class="header-title">
+        RAJIV GANDHI UNIVERSITY OF KNOWLEDGE TECHNOLOGIES <br> R.K. VALLEY
+    </div>
+    <button class="toggle-btn" onclick="toggleTheme()">Toggle Mode</button>
+</div>
+
+<div class="container">
+
+    <!-- Display Profile -->
+    <div class="card">
+        <h2>Student Profile</h2>
+
+        <div class="info-grid">
+            <div><strong>Name:</strong>
+                <span th:text="${student.firstName + ' ' + student.lastName}"></span>
+            </div>
+
+            <div><strong>Email:</strong> <span th:text="${student.email}"></span></div>
+
+            <div><strong>Roll Number:</strong> <span th:text="${student.rollNumber}"></span></div>
+
+            <div><strong>Gender:</strong> <span th:text="${student.gender}"></span></div>
+
+            <div><strong>Department:</strong> <span th:text="${student.department}"></span></div>
+
+            <div><strong>Year/Semester:</strong> <span th:text="${student.yearSemester}"></span></div>
+
+            <div><strong>Phone:</strong> <span th:text="${student.phone}"></span></div>
+
+            <div><strong>Date of Birth:</strong> <span th:text="${student.dob}"></span></div>
+
+            <div><strong>Father’s Name:</strong> <span th:text="${student.fatherName}"></span></div>
+
+            <div><strong>Address:</strong> <span th:text="${student.address}"></span></div>
+        </div>
+
+        <button class="edit-btn" onclick="showForm()">Edit Profile</button>
+    </div>
+	<!-- Edit Form -->
+	<div class="card" id="editForm" style="display:none;">
+	    <h2>Edit Profile</h2>
+
+	    <form th:action="@{/student/profile/update}" method="post" th:object="${student}">
+	        
+	        <!-- Hidden ID field -->
+	        <input type="hidden" th:field="*{id}">
+
+	        <label>First Name</label>
+	        <input type="text" th:field="*{firstName}" required>
+
+	        <label>Last Name</label>
+	        <input type="text" th:field="*{lastName}" required>
+
+	        <label>Roll Number</label>
+	        <input type="number" th:field="*{rollNumber}">
+
+	        <label>Phone</label>
+	        <input type="text" th:field="*{phone}">
+
+	        <label>Gender</label>
+	        <input type="text" th:field="*{gender}">
+
+	        <label>Department</label>
+	        <input type="text" th:field="*{department}">
+
+	        <label>Year & Semester</label>
+	        <input type="text" th:field="*{yearSemester}">
+
+	        <label>Date of Birth</label>
+	        <input type="date" th:field="*{dob}">
+
+	        <label>Father’s Name</label>
+	        <input type="text" th:field="*{fatherName}">
+
+	        <label>Address</label>
+	        <textarea rows="3" th:field="*{address}"></textarea>
+
+	        <br><br>
+
+	        <button class="update-btn" type="submit">Update</button>
+	        <button class="cancel-btn" type="button" onclick="hideForm()">Cancel</button>
+	    </form>
+	</div>
+
+
+</div>
+
+</body>
+</html>

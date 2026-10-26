@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Admin • Manage Staffs & Students — RGUKT RK Valley</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --accent: #3b82f6;
+      --accent-2: #7c3aed;
+      --bg: linear-gradient(135deg,#0f172a 0%, #0b3b5a 100%);
+      --card: rgba(255,255,255,0.06);
+      --glass: rgba(255,255,255,0.06);
+      --text: #e6eef8;
+    }
+    body{ margin:0; font-family:"Poppins",sans-serif; background:var(--bg); color:var(--text); min-height:100vh;}
+    .watermark{
+      position:fixed; inset:0; background:url('@{/images/rgukt_logo.jpeg}') center/500px no-repeat; opacity:0.06; pointer-events:none; z-index:0;
+    }
+    .header{
+      display:flex; align-items:center; gap:18px; padding:18px 28px; backdrop-filter: blur(6px); background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      box-shadow:0 6px 18px rgba(0,0,0,0.4); position:relative; z-index:2;
+      animation: slideDown .6s ease;
+    }
+    .header img{ width:72px; height:auto; border-radius:8px; }
+    .header .title{ font-size:18px; font-weight:600; line-height:1.1; }
+    .top-actions{ margin-left:auto; display:flex; gap:10px; align-items:center; }
+    .btn{ padding:10px 14px; border-radius:8px; border:0; cursor:pointer; font-weight:600;}
+    .btn-light{ background:#fff; color:#0b2447;}
+    .btn-accent{ background:var(--accent); color:white;}
+    .container{ max-width:1100px; margin:28px auto; padding:16px; position:relative; z-index:2;}
+    .grid{ display:grid; grid-template-columns: 1fr 380px; gap:18px; align-items:start;}
+    .card{ background:var(--card); padding:18px; border-radius:14px; box-shadow:0 8px 30px rgba(2,6,23,0.5); }
+    .cards-row{ display:flex; gap:12px; flex-wrap:wrap; }
+    .small-card{ flex:1; min-width:200px; padding:18px; border-radius:12px; background:linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); }
+
+    /* avatar */
+    .avatar{
+      width:72px; height:72px; border-radius:50%; display:inline-grid; place-items:center; font-weight:700; font-size:20px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:white; margin-right:12px;
+    }
+
+    table{ width:100%; border-collapse:collapse; color:var(--text);}
+    thead th{ text-align:left; padding:10px 8px; font-weight:600; color:#cfe8ff; }
+    tbody td{ padding:12px 8px; border-top:1px solid rgba(255,255,255,0.04); vertical-align:middle; }
+    .action-btn{ padding:6px 10px; border-radius:8px; border:0; cursor:pointer; font-weight:600; margin-right:6px;}
+    .action-edit{ background:#10b981; color:white;}
+    .action-delete{ background:#ef4444; color:white;}
+
+    .logout-fixed{
+      position:fixed; bottom:18px; right:18px; z-index:10;
+    }
+
+    @keyframes slideDown{ from{ transform:translateY(-20px); opacity:0 } to{ transform:none; opacity:1; } }
+
+    /* responsive */
+    @media (max-width:900px){
+      .grid{ grid-template-columns: 1fr; }
+      .header{ padding:12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="watermark"></div>
+
+  <header class="header">
+    <img th:src="@{/images/rgukt_logo.jpeg}" alt="RGUKT logo">
+    <div>
+      <div class="title">RAJIV GANDHI UNIVERSITY OF KNOWLEDGE TECHNOLOGIES</div>
+      <div style="opacity:.85; font-size:12px;">R.K. VALLEY — Admin Panel</div>
+    </div>
+
+    <div class="top-actions">
+      <form th:action="@{/admin/staffs}" method="get" style="display:flex; gap:8px; align-items:center;">
+        <input name="q" placeholder="Search staff / email" style="padding:8px 10px; border-radius:8px; border:0; min-width:220px;">
+        <button class="btn btn-light" type="submit">Search</button>
+      </form>
+
+      <a th:href="@{/admin/students}" class="btn btn-accent">Manage Students</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="grid">
+      <!-- left: staff list -->
+      <section class="card">
+        <h3 style="margin-top:0;">Staff Directory</h3>
+        <p style="color: #bcd7ff; margin-top:6px;">All staff members registered in the system.</p>
+
+        <div style="margin-top:14px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Staff</th>
+                <th>Email</th>
+                <th>Dept</th>
+                <th>Designation</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="s : ${staffs}">
+                <td>
+                  <div style="display:flex; align-items:center;">
+                    <div class="avatar" th:text="${(s.firstName != null ? s.firstName.substring(0,1) : '') + (s.lastName != null ? s.lastName.substring(0,1) : '')}">AB</div>
+                    <div>
+                      <div th:text="${s.firstName + ' ' + s.lastName}">Staff Name</div>
+                      <div style="font-size:12px; opacity:.75;" th:text="${'ID: ' + s.staffId}">ID: 1234</div>
+                    </div>
+                  </div>
+                </td>
+                <td th:text="${s.email}">s@rgukt.edu</td>
+                <td th:text="${s.department}">CS</td>
+                <td th:text="${s.designation}">Lecturer</td>
+                <td>
+					<a th:href="@{'/admin/staff/edit/' + ${s.id}}" class="btn btn-warning btn-sm">
+					    Edit
+					</a>
+
+                  <a th:href="@{'/admin/delete-staff/' + ${s.id}}" class="action-btn action-delete"
+                     th:onclick="|return confirm('Delete staff: ${s.firstName} ${s.lastName}?');|">Delete</a>
+                </td>
+              </tr>
+              <tr th:if="${#lists.isEmpty(staffs)}">
+                <td colspan="5" style="padding:18px; color:#cfdffd;">No staff found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- right: quick cards -->
+      <aside>
+        <div class="small-card card">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:56px; height:56px; border-radius:12px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); display:grid; place-items:center; font-weight:700;">A</div>
+            <div>
+              <div style="font-weight:700;">Manage Staffs</div>
+              <div style="opacity:.8; font-size:13px;">Add / edit / remove staff accounts</div>
+            </div>
+          </div>
+          <div style="margin-top:12px; display:flex; gap:8px;">
+            <a th:href="@{/admin/staffs}" class="btn btn-accent" style="width:100%;">Open Staff Manager</a>
+          </div>
+        </div>
+
+        <div class="small-card card" style="margin-top:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:56px; height:56px; border-radius:12px; background:linear-gradient(135deg,#10b981,#06b6d4); display:grid; place-items:center; font-weight:700;">S</div>
+            <div>
+              <div style="font-weight:700;">Manage Students</div>
+              <div style="opacity:.8; font-size:13px;">View and edit student records</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;">
+            <a th:href="@{/admin/students}" class="btn btn-light" style="width:100%; color:#0b2447;">Open Student Manager</a>
+          </div>
+        </div>
+
+        <div class="small-card card" style="margin-top:12px;">
+          <div style="font-weight:700;">Quick Stats</div>
+          <div style="display:flex; gap:8px; margin-top:10px;">
+            <div style="flex:1; background:rgba(255,255,255,0.02); padding:10px; border-radius:8px;">
+              <div style="font-size:20px; font-weight:700;" th:text="${staffs.size()}">0</div>
+              <div style="font-size:12px; opacity:.8;">Staffs</div>
+            </div>
+            <div style="flex:1; background:rgba(255,255,255,0.02); padding:10px; border-radius:8px;">
+              <div style="font-size:20px; font-weight:700;" th:text="${studentsCount != null ? studentsCount : 0}">0</div>
+              <div style="font-size:12px; opacity:.8;">Students</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <div class="logout-fixed">
+    <a th:href="@{/logout}" class="btn btn-light">Logout</a>
+  </div>
+
+</body>
+</html>

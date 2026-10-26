@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Staff Dashboard</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-primary px-3">
+    <a class="navbar-brand" href="#">Staff Dashboard</a>
+	<a class="btn btn-outline-light" th:href="@{/logout}">Logout</a>
+
+</nav>
+
+<div class="container py-5">
+    <h2 class="text-center mb-4">Welcome, Staff</h2>
+
+    <div class="row justify-content-center">
+
+        <!-- Manage Students -->
+        <div class="col-md-4">
+            <div class="card shadow">
+                <img src="https://cdn-icons-png.flaticon.com/512/3305/3305676.png"
+                     class="card-img-top p-4" style="height:200px; object-fit:contain;">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Manage Students</h5>
+                    <p class="card-text">View or update student records.</p>
+					<a th:href="@{/staff/students}" class="btn btn-primary">Open</a>
+					
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Approve Certificates -->
+        <div class="col-md-4">
+            <div class="card shadow">
+                <img src="https://cdn-icons-png.flaticon.com/512/2920/2920244.png"
+                     class="card-img-top p-4" style="height:200px; object-fit:contain;">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Approve Certificate Requests</h5>
+                    <p class="card-text">Approve or review certificate applications.</p>
+                    <a th:href="@{/staff/requests}" class="btn btn-success">Go</a>
+                </div>
+            </div>
+        </div>
+		<div class="text-center">
+		       <p>Total requests: <strong th:text="${totalRequests}">0</strong></p>
+		   </div>
+
+    </div>
+</div>
+
+</body>
+</html>

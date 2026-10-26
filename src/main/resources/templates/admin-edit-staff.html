@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Edit Staff • Admin — RGUKT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{ --bg: linear-gradient(135deg,#06263b, #0b3b5a); --card:#0b2440; --accent:#3b82f6; --text:#ecf6ff;}
+    body{ margin:0; font-family:"Poppins",sans-serif; background:var(--bg); color:var(--text);}
+    .wrap{ max-width:900px; margin:32px auto; padding:18px;}
+    .header{ display:flex; gap:12px; align-items:center; }
+    .header img{ width:64px; }
+    .back{ margin-left:auto; }
+    .card{ background: rgba(255,255,255,0.03); padding:18px; border-radius:12px; margin-top:18px;}
+    label{ display:block; margin-top:10px; font-weight:600; font-size:13px; opacity:.95;}
+    input,select,textarea{ width:100%; padding:10px; border-radius:8px; border:0; margin-top:6px; background:rgba(255,255,255,0.02); color:var(--text);}
+    .group{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    .actions{ display:flex; gap:10px; margin-top:14px; }
+    .btn{ padding:10px 14px; border-radius:8px; border:0; cursor:pointer; font-weight:700;}
+    .btn-save{ background: #10b981; color:white;}
+    .btn-cancel{ background:#ef4444; color:white;}
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <div class="header">
+      <img th:src="@{/images/rgukt_logo.jpeg}" alt="logo">
+      <div>
+        <div style="font-weight:700;">Edit Staff</div>
+        <div style="opacity:.85; font-size:13px;">Update staff personal and professional details</div>
+      </div>
+      <div class="back">
+        <a th:href="@{/admin/staffs}" style="text-decoration:none;"><button class="btn" style="background:#fff;color:#06263b;">Back</button></a>
+      </div>
+    </div>
+
+    <div class="card">
+		<form th:action="@{'/admin/staff/update/' + ${staff.id}}" th:object="${staff}" method="post">
+		<input type="hidden" th:field="*{id}" />
+
+        <div class="group">
+          <div>
+            <label>Full name</label>
+            <input type="text" th:field="*{firstName}" placeholder="First name" required />
+          </div>
+          <div>
+            <label>Last name</label>
+            <input type="text" th:field="*{lastName}" placeholder="Last name" required />
+          </div>
+        </div>
+
+        <label>Email</label>
+        <input type="email" th:field="*{email}" readonly />
+
+        <div class="group">
+          <div>
+            <label>Phone</label>
+            <input type="text" th:field="*{phone}" />
+          </div>
+          <div>
+            <label>Gender</label>
+            <select th:field="*{gender}">
+              <option value="">Choose</option>
+              <option value="Male" th:selected="${staff.gender=='Male'}">Male</option>
+              <option value="Female" th:selected="${staff.gender=='Female'}">Female</option>
+              <option value="Other" th:selected="${staff.gender=='Other'}">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="group">
+          <div>
+            <label>Department</label>
+            <input type="text" th:field="*{department}" />
+          </div>
+          <div>
+            <label>Designation</label>
+            <input type="text" th:field="*{designation}" />
+          </div>
+        </div>
+
+        <div class="group">
+          <div>
+            <label>Staff ID</label>
+            <input type="text" th:field="*{staffId}" />
+          </div>
+          <div>
+            <label>Date of Birth</label>
+            <input type="date" th:field="*{dob}" />
+          </div>
+        </div>
+
+        <label>Address</label>
+        <textarea rows="3" th:field="*{address}"></textarea>
+
+        <div class="actions">
+          <button class="btn btn-save" type="submit">Save changes</button>
+          <a th:href="@{/admin/staffs}" class="btn btn-cancel">Cancel</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

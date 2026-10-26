@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Student | Admin Panel | RGUKT RK Valley</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg1: #0f172a;
+            --bg2: #1e293b;
+            --text: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.15);
+        }
+
+        body.light {
+            --bg1: #f3f6fd;
+            --bg2: #ffffff;
+            --text: #111;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --border: #ddd;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--bg1), var(--bg2));
+            min-height: 100vh;
+            color: var(--text);
+            transition: 0.4s ease-in-out;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 15px 40px;
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(12px);
+        }
+
+        .header img {
+            width: 60px;
+            margin-right: 15px;
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .theme-btn {
+            margin-left: auto;
+            padding: 8px 18px;
+            border-radius: 8px;
+            border: none;
+            background: #4e8cff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .main-container {
+            max-width: 750px;
+            margin: 40px auto;
+        }
+
+        .edit-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 22px rgba(0,0,0,0.25);
+            animation: fadeIn 0.6s;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        .btn-save {
+            background: #22c55e;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 16px;
+            color: white;
+            width: 100%;
+        }
+
+        .btn-save:hover {
+            background: #16a34a;
+        }
+
+        .btn-back {
+            margin-top: 10px;
+            width: 100%;
+        }
+    </style>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle("light");
+        }
+    </script>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <img th:src="@{/images/rgukt_logo.jpeg}">
+    <div class="header-title">
+        Rajiv Gandhi University of Knowledge Technologies, RK Valley<br>
+        <span style="font-size: 14px; opacity: 0.8;">Admin Panel — Edit Student</span>
+    </div>
+
+    <button class="theme-btn" onclick="toggleTheme()">Toggle Mode</button>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="main-container">
+
+    <div class="edit-card">
+
+        <h3 class="text-center mb-4">Update Student Information</h3>
+
+        <!-- FORM START -->
+        <form th:action="@{'/admin/update-student/' + ${student.id}}" method="post" th:object="${student}">
+
+            <!-- hidden id field -->
+            <input type="hidden" th:field="*{id}">
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label>First Name</label>
+                    <input class="form-control" type="text" th:field="*{firstName}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label>Last Name</label>
+                    <input class="form-control" type="text" th:field="*{lastName}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label>Email</label>
+                    <input class="form-control" type="email" th:field="*{email}" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label>Roll Number</label>
+                    <input class="form-control" type="number" th:field="*{rollNumber}">
+                </div>
+
+                <div class="col-md-6">
+                    <label>Department</label>
+                    <input class="form-control" type="text" th:field="*{department}">
+                </div>
+
+                <div class="col-md-6">
+                    <label>Year & Semester</label>
+                    <input class="form-control" type="text" th:field="*{yearSemester}">
+                </div>
+
+                <div class="col-md-6">
+                    <label>Phone Number</label>
+                    <input class="form-control" type="text" th:field="*{phone}">
+                </div>
+
+                <div class="col-md-6">
+                    <label>Date of Birth</label>
+                    <input class="form-control" type="date" th:field="*{dob}">
+                </div>
+
+                <div class="col-md-6">
+                    <label>Gender</label>
+                    <input class="form-control" type="text" th:field="*{gender}">
+                </div>
+
+                <div class="col-md-6">
+                    <label>Father's Name</label>
+                    <input class="form-control" type="text" th:field="*{fatherName}">
+                </div>
+
+                <div class="col-12">
+                    <label>Address</label>
+                    <textarea class="form-control" rows="3" th:field="*{address}"></textarea>
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn-save mt-4">Save Changes</button>
+
+        </form>
+
+        <!-- Back Button -->
+        <a th:href="@{/admin/students}" class="btn btn-secondary btn-back">Back to Students</a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
